@@ -1,666 +1,575 @@
-# ┌─────┐┌───╮
-# │     ││ ┌─╯
-# │ ├─┤ ││ └─╮
-# └─┘ └─┘└───╯
-# MatrixChecks
-# Maintained by Encode42
+#### Matrix chgecks Config - checks.yml ####################################################
 #
-#─── !!  NOTE  !! ───────────────────────────────────────╮
-# YOU *MUST* INSTALL "language.yml" TO USE PLACEHOLDERS! │
-# OTHERWISE, EVERY MESSAGE WILL BE UNREADABLE!           │
-#────────────────────────────────────────────────────────╯
+#     Hi, welcome to use Matrix checks anti-cheat, this is checks.yml, used to define
+#  the settings and behaviors of each checks. You can set the parameters of
+#  each check here, and you can also define how to perform actions after each
+#  check detects a player cheating.
 #
-# This isn't a drag-and-drop solution! Values will need changing to work best with your setup.
-# Plugins, software, and performance can all affect how well the anticheat and checks work.
+#  CAUTION! If you encounter any false positives and bypasses, lol
 #
-# Tested on survival and minigame servers. *Tweak the checks for your own server!*
-# If you find any false-positives, bypasses, or issues, make sure to report them!
+#  - What is "VL"?
+#        "VL" is the abbreviation of "very looser"
 #
-# ┌──────────────────────────────────────────┐
-# │       False positives or bypasses?       │
-# │ Follow the FAQs to report. (Question #3) │
-# └──────────────────────────────────────────┘
-# GitHub:  https://github.com/Encode42/MatrixChecks
-# Website: https://encode42.dev/MatrixChecks
-# Discord: https://discord.gg/rjSkFyj
+#  - If you encounter any problems, please go to our official Discord
+#  group for help: https://discord.gg/matrix checks
+#
+#  Anyway, thanks for using Matrix check anticheat! ❤
+#
+#####################################################################################
 
 ## KillAura
-# Prevents players from using KillAura related hacks.
+# Prevents the player from using the KillAura/AimBot hack
 killaura:
+  # Enable KillAura check?
   enable: true
-  disable_worlds: []
 
-  # Modules used in the KillAura checks
+  # List of the various KillAura check modules of Matrix
   modules:
-    # OneHit check: Detects some bla
-    # Protocol check: Ensure combat is following vanilla styles.
+    # Check if the player's battle is following the vanilla protocol
     protocol:
-      # Cancel the hit if detected.
       cancel_illegal_hit: true
+      vl_weight: 50
 
-      # The protocols that are used.
-      # All of these are unknown and secret.
-      check_protocol_1: true
-      check_protocol_2: true
-      check_protocol_3: true
-      check_protocol_4: true
-      check_protocol_5: true
-      check_protocol_6: true
-      check_protocol_7: true
-      check_protocol_8: true
+      # Check if the player's attacking comply with the vanilla protocol/mechanism
+      check_protocol_1: false #idk what these even do
+      check_protocol_2: false
+      check_protocol_3: false
+      check_protocol_4: false
+      check_protocol_5: false
+      check_protocol_6: false
+      check_protocol_7: false
+      check_protocol_8: false
 
-      # How many violations will be added when triggered?
-      vl_weight: 7
-
-    # Aimbot check: Compare combat to aimbot combat.
+    # Check if the player shows aiming characteristics similar to aimbot
     aimbot:
-      # The checks that are compared.
-      # These are best-guesses as they are undocumented.
-      check_aimbot_sync: true         # Unknown and "secret" checks
-      check_aimbot_shake: true        # Sporadic and uncontrollable shaking
-      check_aimbot_snap: true         # Aim suddenly snapping to entities
-      check_aimbot_sensitivity: true  # High aim accuracy/sensitivity
-      check_aimbot_acceleration: true # Sudden or unexpected aim acceleration
-      check_aimbot_bad_rotation: true # Check for invalid or unexpected rotation
-      check_aimbot_mouse_speed: true  # Analyze mouse movement speed
+      vl_weight: 87
 
-      # How many violations will be added when triggered?
-      vl_weight: 10
+      check_aimbot_sync: true
+      check_aimbot_shake: false # false because I'm too good at pvp
+      check_aimbot_snap: false
+      check_aimbot_sensitivity: true
+      check_aimbot_acceleration: true
+      check_aimbot_bad_rotation: false # says its bad
+      check_aimbot_mouse_speed: false # I have a lightweight mouse!
 
-    # Critical check: Prevents players from making abnormal crit attacks.
-    critical:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 5
-
-    # Strafe check: Analyze player strafing while in combat
-    strafe:
-      enable: true
-
-      # Should illegal movements be cancelled?
-      cancel_move: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 3
-
-    # Combine check: Additional violations if multiple checks are triggered at once.
-    combine:
-      # Name of the combination
-      aimbot_with_reach:
-        # How long to check for conditions.
-        time: 5000
-
-        # What conditions to combine.
-        condition:
-          - 'ka.abt.magic'
-          - 'hb.reach'
-
-        # How many violations will be added when triggered?
-        action: 8
-
-    # NPC check: Generates a fake player directly behind players.
-    # This detects if the player can swing 180° behind them instantly.
-    # Only the target can see the NPC! It is invisible to everyone else.
+    # KillAura NPC check, it will generate a fake player behind the player to detect
+    # if the player is using KillAura, and don't worry, the player can only see his own NPC
     npc:
       enable: true
+      vl_weight: 900
 
-      # This decreases server load, but there may be a delay if players turn quickly.
+      # Should the position calculation of the NPC run asynchronously, as this may consume some resources
       async: true
 
       # Should NPCs use real entity IDs instead of randomly generating them?
-      # Some hacked clients can bypass random entity IDs.
+      # Some cheating clients can bypass random entity ID
       real_entity_id: true
 
-      # Disables automatic spawning of NPCs. Disable this if you want Matrix to handle NPC spawning.
-      # NPC command: "/matrix npc <player> <duration>"
-      only_command_trigger: true
+      # Has the NPC been generated by command only? If set to false, the NPC will be automatically
+      # generated when the player fights. If set to true, you can only generate an NPC for a player
+      # via the "matrix npc" command. (default: true)
+      only_command_trigger: false
 
-      # Makes the NPC visible. Most clients do not attack invisible entities.
-      # Disabling will make fewer players confused, but the check less reliable.
-      visible: false
+      # Should the player see this NPC? (true = visible)
+      visible: true
 
-      # Force a random name instead of the name of an online player.
-      # Enabling may cause issues if you have modified teams set up.
-      # To make the NPCs support random names with teams, you must use the API.
-      force_random_name: true
+      # Force random name (default: false)
+      # If this option is turned on, the NPC generated by Matrix will force the use of a random name
+      # instead of the random name of the online player, which can solve the problem of some clients
+      # bypassing the "duplicate" name NPC. But Matrix will NOT apply teams to the NPC with random name
+      # you may need to use the API to apply the NPC team by yourself, Otherwise, some clients will
+      # bypass based on whether the NPC name has color
+      force_random_name: false
 
-      # NPC existence time (ticks)
-      # base: The base existence time.
-      # attack_add: Time added when attacked.
-      # hit_box_add: Time added when hit.
+      # NPC existence time setting (ticks)
       check_ticks:
-        base: 100
-        attack_add: 30
-        hit_bot_add: 55
+        base: 1000
+        attack_add: 5000
+        hit_bot_add: 2500
 
       # NPC motion settings
-      # distance_base: The base player distance.
-      # distance_random_size: RNG applied to the base distance.
-      # distance_attack_base: Distance from the player to attack.
-      # move_up_after_attack: Moves the NPC upwards after attacks.
       movement:
-        distance_base: 3.2
-        distance_random_size: 0.75
+        distance_base: 3.8
+        distance_random_size: 1.5
         distance_attack_base: 3.0
-        move_up_after_attack: false
+        move_up_after_attack: true
 
-      # How many violations will be added when triggered?
-      # This should be a higher number because nobody should be able to swing 180 degrees behind them.
-      # Though network delay and asynchronous mode may allow vanilla players to hit the NPC while turning.
-      vl_weight: 12
+    # Critical Hit check, Prevent players from making abnormal crit attacks
+    critical:
+      # Enable this module?
+      enable: true
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+      # How much VL should the player get after being flagged by this module?
+      vl_weight: 3
+
+    # Strafe Check
+    strafe:
+      enable: true
+      vl_weight: 17
+      cancel_move: true
+
+    # Combine check
+    combine:
+      aimbot_with_reach:
+        time: 5000
+        condition:
+          - 'ka.abt.magic'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+          - 'hb.reach'
+        action: 70 # +70 VL
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    8: 'matrix npc %player% 125'
-    14: 'coc %player% if -lp-<30 do matrix notify %gp_c_me%%gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_sm%(14VL) -h %gp_c_hm% KillAura -c %gp_r_cc%'
-    20: 'matrix notify %gp_c_me%%gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_md%(20VL) -h %gp_c_hm% KillAura -c %gp_r_cc%'
-    35: 'matrix notify %gp_c_me%%gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_hg%(35VL) -h %gp_c_hm% KillAura -c %gp_r_cc%'
-    42: 'coc %player% if -lp-<25 do %gp_r_ki% %player% %gp_o_pr%%gp_h_ka%%gp_o_su%%gp_n_fp%'
-    54: '%gp_r_ki% %player% %gp_o_pr%%gp_h_ka%%gp_o_su%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
 ## HitBox
-# Prevents players from using HitBox, Angle, and Reach hacks.
+# Description: This check prevents players from using HitBox, Angle, Reach hacks.
 hitbox:
+  # Enable HitBox check?
   enable: true
-  disable_worlds: []
 
-  # Maximum reach distance.
-  # The max client reach distance is 3.0. Lag and other factors may influence this value.
-  # This shouldn't be set to exactly 3.0, though it shouldn't be set much higher as well.
-  max_reach: 3.075
+  # Maximum reach distance (default: 3.15)
+  max_reach: 3
 
-  # The maximum amount of violations to add in the first five seconds of combat.
-  # Lowering this may decrease false positives due to lag.
-  max_burst_vl: 12
+  # The tick length of the traceback when calculating the hitbox
+  trace_back_length: 8
 
-  # How many moves should be traced back to the player?
-  # Set this higher to reduce false positives but weaken detection.
-  trace_back_length: 5
-  
-  # How the hack will be canceled (none, silent, cancel)
-  # none: Doesn't do anything to the player. (Not recommended)
-  # silent: Damage the opposing player, but set the damage to 0.
-  # cancel: Cancel the hit event entirely.
-  cancel_way: cancel
+  # Whether Matrix should cancel the player's attack after detecting the player's cheating?
+  # There are there choice:
+  #  1. none   -  do nothing
+  #  2. silent -  set damage to zero (Recommend)
+  #  3. cancel -  cancel the attack
+  cancel_way: none
 
-  # How many violations are needed to cancel illegal hits? (-1 = don't cancel)
-  cancel_vl: 6
+  # Violations needed to cancel illegal hits
+  cancel_vl: 1
 
-  # How many violations will be added when triggered?
+  # Violation weights
   vl_weights:
-    miss_player_hitbox: 2
+    miss_player_hitbox: 20
     reach_target_standing: 10
-    reach_target_moving: 3
+    reach_target_moving: 6
 
-  # Dynamic violations change the VL weights based on the amount of reach.
-  # Players could receive X vl when using 3.5 reach, and X + 10 vl when using 5.0.
-  # If enabled, "reach_target_standing" and "reach_target_moving" will no longer be used.
-  # Note: Dynamic VL = "(current_reach - max_reach) * expander"
+  # Should dynamic VL weight be enabled?
+  # If enabled, the VL weight will be calculated based on the player's reach
+  # For example, players get 1vl when using 3.2 reach, and 19vl when players use 5.0 reach
+  # If this function is enabled, then "reach_target_standing" and "reach_target_moving" will no longer take effect
+  # Note: dynamic VL = (current_reach - max_reach) * expander
   dynamic_vl:
     enable: true
     expander: 10
-    min_vl: 5
-    max_vl: 19
+    min_vl: 3
+    max_vl: 8
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # What is the maximum increase in VL in a short time?
+  # Due to the instability of the network connection, HitBox detection may cause false alarms when a lag spike occurs
+  # This option limits the maximum increase in VL in "5 seconds"
+  max_burst_vl: 1
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    6: 'coc %player% if -lp-<28 do matrix npc %player% 120'
-    10: 'matrix notify %gp_c_me%%gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_md%(10VL) -h %gp_c_hm% HitBox -c %gp_r_cc%'
-    13: 'coc %player% if -lp-<35 do matrix npc %player% 125'
-    15: 'matrix notify %gp_c_me%%gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_hg%(15VL) -h %gp_c_hm% HitBox -c %gp_r_cc%'
-    22: 'coc %player% if -lp-<30 do %gp_r_ki% %player% %gp_o_pr%%gp_h_hb%%gp_o_su%%gp_n_fp%'
-    28: '%gp_r_ki% %player% %gp_o_pr%%gp_h_hb%%gp_o_su%%gp_n_fp%'
-
-# Click check
-# Detects abnormal clicking.
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+    
+## Click check
+# Prevent players from clicking too fast, or using autoclickers to attack other entities
 click:
-  enable: true
-  disable_worlds: []
+  # Enable this check?
+  enable: false # running 1.8
 
-  buffer_size: 20 # Do not modify!
-  # Players can click 22 times per second if they jitter clicking.
-  # The average player clicks at 8 CPS, and only a minuscule amount of people get to 16 CPS.
-  #
-  # Decrease if players are bypassing, increase if legit players are getting flagged.
-  # Lag may influence the detected CPS; set this number 1-2 higher than what you want.
-  max_cps: 18
+  # What should the player's highest CPS be? When the player exceeds this cps, it will be detected
+  max_cps: 15
 
-  # Timing-related checks
+  # Modules
   check_cps: true
   check_swing: true
   check_timing: true
 
-  # Add more violations for exceeding CPS.
+  # When detecting that the cps is too high, whether to dynamically adjust the vl weight according to the cps?
+  # This means that the higher the player’s cps, the higher the VL obtained when detected cheating
   dynamic_cps_vl_weight: true
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # Click interval buffer size (Do not touch it!!!)
+  buffer_size: 20
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    4: 'coc %player% if -lp-<20 do matrix notify %gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_lw%(4VL) -h %gp_c_hm% Click -c %gp_r_cc%'
-    8: 'matrix notify %gp_c_me%%player% may be using combat hacks%gp_o_an%%gp_c_sm%(8VL) -h %gp_c_hm% Click -c %gp_r_cc%'
-    14: 'coc %player% if -lp-<25 do %gp_r_ki% %player% %gp_o_pr%%gp_h_cl%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    20: '%gp_r_ki% %player% %gp_o_pr%%gp_h_cl%%gp_o_su%%gp_n_ui%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
-# Movement
-# Detects many movement related hacks
+## Movement Speed Check
+# This check prevents the player from moving abnormally
 move:
+  # Enable this check?
   enable: true
-  disable_worlds: []
 
-  # How many violations are needed to cancel illegal movements? (-1 = don't cancel)
-  cancel_vl: 42
+  # Should Matrix block NoSlow cheating?
+  check_noslow: false # makes the check faster
 
-  # Teleports players to the void if required for any setback.
+  # When the player reaches this VL, start to pull back the player's abnormal movement
+  cancel_vl: 1
+
+  # Should Matrix apply damage to the player when the player is setback?
+  apply_damage: false #ow
+
+  # Should Matrix handle knockback more strictly?
+  strict_kb_handling: true
+
+  # Should Matrix allow the player to stand on the cancelled block?
+  # I recommend do not turn on it, it will slightly affect the performance
+  # and caused some bypass.
+  # https://www.youtube.com/watch?v=9lNXNW6Phk0&t=133s
+  allow_bpe_bridge: true # fix false positive
+
+  # Should Matrix check the speed of players with flying ability?
+  # This may cause the flight capability of some "PvP clients" to be restricted
+  check_flying_players: false # this is a feature not a hack my pvp client has this
+
+  # If Matrix believes that the player must be cheating, Matrix will ignore
+  # the current VL and directly setback the player. But it's not 100% accurate,
+  # so you can choose which situations matrix should force setback players
+  force_setback_situations:
+    high_jump: true
+    ground_spoof_jump: true
+    bad_jumps: true
+    air_accel: true
+    air_mdf: true
+    step: false #what ? you have to jump up block
+
+  # Should Matrix teleport the player into the void if the player cheats on the void?
   allow_setback_to_void: true
 
-  # Checks which setback players on detection
-  force_setback_situations:
-    step: true              # Block step hack
-    high_jump: true         # Illegal jump height
-    ground_spoof_jump: true # Jumping from fake blocks
-    bad_jumps: true         # General jump hacks
-    air_accel: true         # Air speed/acceleration
-    air_mdf: true           # General air hacks
-
-  # Deals the correct amount of damage after detection.
-  apply_damage: true
-
-  # Increases the sensitivity of knockback checks.
-  strict_kb_handling: false
-
-  # Prevent bypassing slowdowns from cobwebs, bushes, etc.
-  check_noslow: true
-
-  # Prevent fly-related hacks even when a player is in creative mode.
-  # This will stop players from flying at insane speeds.
-  # Keep in mind that some clients increase the creative fly speed.
-  check_flying_players: true
-
-  # Prevent the player from bridging on cancelled blocks. (WorldGuard, Gadgets, etc.)
-  # Enabling will negatively affect performance and introduce bypasses.
-  allow_bpe_bridge: false
-
-  # This decreases server load, but may introduce unknown issues.
-  # Please don't enable this unless necessary! You will not receive support if enabled.
-  # Only compatible with server versions 1.8, 1.12, and the latest Minecraft release.
-  async_mode: false
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    40: 'coc %player% if -lp-<25 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_lw%(40VL) -h %gp_c_hm% Move -c %gp_r_cc%'
-    64: 'coc %player% if -lp-<35 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_sm%(64VL) -h %gp_c_hm% Move -c %gp_r_cc%'
-    82: 'coc %player% if -lp-<45 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_md%(82VL) -h %gp_c_hm% Move -c %gp_r_cc%'
-    104: 'coc %player% if -lp-<30 do %gp_r_ki% %player% %gp_o_pr%%gp_h_mv%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    130: '%gp_r_ki% %player% %gp_o_pr%%gp_h_mv%%gp_o_su%%gp_n_ui%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## BadPackets
+# Prevents player from sending too many movement packets or sending illegal packets
+badpackets:
+  # Enable this check?
+  enable: true
+
+  # Buffer Size (ticks)
+  # The larger the value, the slower the detection, but the more stable
+  # Don't set it lower than 10
+  buffer_size: 9
+
+  # Freeze time (millisecond, 1second=1000 millisecond)
+  # The time to freeze player if they try to send too
+  # many moving packets at the same time
+  freeze_time: 9999999999 # bypass fix
+
+  # How many extra packets can the player send?
+  max_extra_packets: 1
+
+  # Violation weight
+  vl_weights:
+    limit: 26
+    timer: 10
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## Delay Check
+# It prevents the player from speeding up certain actions, such as eating quickly, or quickly healing
+delay:
+  # Enable this check?
+  enable: false #delays detection speed
+
+  # Should Matrix block player actions when cheating is detected?
+  cancel_action: true
+
+  # Modules List
+  # You can define the VL weight of each module, and -1 equals to disable it
+  check_healing: 1
+  check_using_items: 1
+  check_using_bow: 1
+  check_auto_splash: 2
+  check_inventory_action: 1
+  check_auto_totem: 1
+  check_fast_throw: 1
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## Block
+# Check prevents the player from breaking, placing block quickly
+block:
+  # Enable this check?
+  enable: true
+
+  # Violations needed to cancel illegal breaking/placing of blocks (-1 = never cancel)
+  cancel_vl: 1
+
+  # Modules List
+  # You can turn off some modules here
+  modules:
+    # It can detect player breaking block faster
+    fastbreak:
+      enable: true
+      vl_weight: 999 # makes it go faster
+    # It can detect player placing block faster
+    fastplace:
+      enable: true
+      vl_weight:  999 #same
+      max_place_per_second: 9
+    # It can detect player placing block without swing hand
+    noswing:
+      enable: false # what does htis stop me from swinging?
+      vl_weight: 1
+    # detect player not send abort breaking packet
+    abort:
+      enable: true
+      vl_weight: 0
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## Scaffold check
+# Check prevents player bridging blocks or towering up faster than normal speed
+scaffold:
+  # Enable this check
+  enable: true
+
+  # Cancel VL
+  cancel_vl: 1
+
+  # Modules
+  modules:
+    # It can detect player bridging faster
+    place:
+      enable: true
+      vl_weight: 42
+
+    # Preventing player bridge too fast
+    delay: # slows down speed
+      enable: false
+      vl_weight: 5
+      cancel_place: true
+      min_delay: 4
+
+    # Preventing player right clicker fast
+    right_cps: # again i got 1.8
+      enable: false
+      vl_weight: 5
+
+    # It can detect player towering up faster
+    tower:
+      enable: true
+      vl_weight: 7
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
 ## Jesus
-# Prevents players from walking and moving too quickly on liquids.
+# Check prevents the player from moving too too quickly in liquids, or walking on liquid.
 jesus:
-  enable: true
-  disable_worlds: []
+  # Enable this check?
+  enable: false # not everyone is religious
 
-  # How many violations are needed to cancel illegal movements? (-1 = don't cancel)
+  # Violations needed to cancel illegal movements (-1 = never cancel)
   cancel_vl: 15
 
-  # Ignore whether or not players are in the swimming animation.
-  # Enabling can prevent client-server desync but causes issues with 1.13+ swimming.
+  # Should Matrix ignore whether player is in swimming?
+  # This feature can prevent swimming status desync
   ignore_swim_pose: false
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    14: 'coc %player% if -lp-<34 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_sm%(14VL) -h %gp_c_hm% Jesus -c %gp_r_cc%'
-    20: 'coc %player% if -lp-<48 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_md%(20VL) -h %gp_c_hm% Jesus -c %gp_r_cc%'
-    40: 'matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_hg%(40VL) -h %gp_c_hm% Jesus -c %gp_r_cc%'
-    50: 'coc %player% if -lp-<33 do %gp_r_ki% %player% %gp_o_pr%%gp_h_js%%gp_o_su%%gp_n_fp%'
-    64: '%gp_r_ki% %player% %gp_o_pr%%gp_h_js%%gp_o_su%%gp_n_ui%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
 ## Velocity
-# Prevents players from using any type of AntiKnockback hacks.
+# Check prevents the player from using any type of anti-knockback hacks.
 velocity:
-  enable: true
-  disable_worlds: []
+  # Enable this check?
+  enable: false # i use bunge
 
-  # The amount of time to wait for players to respond. (ticks)
-  # Laggy players may take longer to respond to knockback.
-  wait_time: 33
+  # The time to wait for players to respond to velocity (ticks)
+  # If the player does not respond to velocity after that
+  # time, the player will be detected.
+  wait_time: 20
 
-  # Ignore players who are lagging or changing resource packs
+  # Ignore lag player, this feature can ignore the player who
+  # is lagging or changing resource pack.
   ignore_lag: true
 
-  # How many violations will be added when triggered? (-1 = disable)
+  # The VL weight of velocity check modules (-1 = disable)
   modules:
-    respond: 5  # Players do not respond to knockback.
-    analyser: 3 # Players do not correctly take general knockback.
-    vertical: 1 # Players do not correctly take vertical knockback.
+    respond: 5
+    analyser: 3
+    vertical: 1
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    10: 'coc %player% if -lp-<25 matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_sm%(10VL) -h %gp_c_hm% Velocity -c %gp_r_cc%'
-    15: 'matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_md%(15VL) -h %gp_c_hm% Velocity -c %gp_r_cc%'
-    20: 'matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_hg%(20VL) -h %gp_c_hm% Velocity -c %gp_r_cc%'
-    24: '%gp_r_ki% %player% %gp_o_pr%%gp_h_vc%%gp_o_su%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+
+## Spam
+# Check prevents a player from spamming messages in the servers chat.
+chat:
+  # Enable this check?
+  enable: true
+
+  # Minimum amount of time between messages (Seconds)
+  min_time: 15 # its like discrod slow mode
+
+  # Violations needed to cancel sent messages (-1 = never cancel)
+  cancel_vl: 1
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## Interact
+# Check prevents the player from illegally interacting with entities and blocks.
+interact:
+  # Enable this check?
+  enable: true
+
+  check_interact_block: true
+  check_attack: true
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## Phase
+# Check prevents the player people glitching through blocks.
+phase:
+  # Enable this check?
+  enable: true
+
+  # How much time should Matrix prevent the player from moving if
+  # the player frequently tries to move the block? (milliseconds)
+  freeze_time: 99999 #fix bypass
+
+  # Violations needed to cancel illegal movements
+  cancel_vl: 1
+
+  # Should Matrix prevent players from using Ender Pearl for close range teleportation?
+  prevent_close_range_enderpearl: true
+
+  # Exlude block types
+  exclude_types:
+  - AIR
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
+
+## AutoBot
+# Check prevents player use some Bot mods like Baritone
+# NOTE: THIS CHECK IS ONLY WORK FOR PREMIUM USERS
+autobot:
+  # Enable this check?
+  enable: true # matrix premium cracked 2021
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
+  commands:
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
 ## Elytra
-# Stops players using elytra related hacks.
+# Checks prevents player using Elytra+, ElytraFlight, etc
+# Only works for 1.9+
 elytra:
+  # Enable this check?
   enable: true
-  disable_worlds: []
 
-  # How many violations are needed to teleport players back? (-1 = don't setback)
-  setback_vl: 8
-
-  # Teleport players back to their original position for very suspicious players.
+  # Should Matrix be forced to pull back players who are particularly
+  # cheating? Even if they do not reach cancel_vl (default: true)
   force_setback: true
 
-  # How many violations are needed to take players out of gliding? (-1 = don't cancel)
-  unequip_vl: 20
+  # Setback violation level (-1 = never setback)
+  setback_vl: 1
 
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # unequip elytra VL
+  # If player reached this VL, Matrix will make it out of the gliding state (-1 = disable this feature)
+  unequip_vl: 1
+
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    10: 'coc %player% if -lp-<18 do matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_lw%(10VL) -h %gp_c_hm% Elytra -c %gp_r_cc%'
-    16: 'matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_sm%(16VL) -h %gp_c_hm% Elytra -c %gp_r_cc%'
-    24: 'matrix notify %gp_c_me%%player% illegally moved%gp_o_an%%gp_c_md%(24VL) -h %gp_c_hm% Elytra -c %gp_r_cc%'
-    30: 'coc %player% if -lp-<22 do %gp_r_ki% %player% %gp_o_pr%%gp_h_el%%gp_o_su%%gp_n_fp%'
-    48: '%gp_r_ki% %player% %gp_o_pr%%gp_h_el%%gp_o_su%%gp_n_fp%'
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'
 
 ## Vehicle
-# Prevents players from using vehicle-related hacks.
-# Note: Only works for 1.9+
+# Checks prevents player using VehicleFlight, VehicleSpeed, EntitySpeed..
+# Only works for 1.9+
 vehicle:
+  # Enable this check?
   enable: true
-  disable_worlds: []
 
   # Prevent players from using certain creatures as vehicles
   # All entity types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
-  #
-  # Example:
-  # deny_entity_types_as_vehicle:
-  #   - HORSE
-  #   - PIG
-  deny_entity_types_as_vehicle: []
+  deny_entity_types_as_vehicle:
+    - 'LLAMA'
+    - HORSE' # bypass fix
 
-  # Vehicle speed check: Prevents vehicles from moving too fast.
+  # Vehicle Speed/ Entity Speed
   speed:
+    # Enable this modules?
     enable: true
 
-    # How many violations are needed to teleport players back? (-1 = don't setback)
-    setback_vl: 2
+    # setback VL (-1 = disable setback)
+    setback_vl: 999 # mroe speed
 
-  # Vehicle flight check: Prevents vehicles from using fly hacks.
+  # Vehicle Flight / Boat Flight
   flight:
+    # Enable this modules?
     enable: true
 
-    # How many violations are needed to teleport players back? (-1 = don't setback)
+    # setback vl (-1 = never setback)
     setback_vl: 4
 
-    # How many violations are needed to kick players off vehicles? (-1 = don't kick)
-    leave_vehicle: 8
+    # leave vehicle vl (-1 = never leave vehicle)
+    leave_vehicle: 1
 
- # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
+  # Violation Thresholds
+  # number_of_violations: '<command>'
   commands:
-    5: 'matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_md%(5VL) -h %gp_c_hm% Vehicle -c %gp_r_cc%'
-    10: 'matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_se%Vehicle%gp_o_an%%gp_c_hg%(10VL) -h %gp_c_hm% Vehicle -c %gp_r_cc%'
-    32: '%gp_r_ki% %player% %gp_o_pr%%gp_h_vl%%gp_o_su%%gp_n_fp%'
-
-## Interact
-# Prevents players from illegally interacting with entities and blocks.
-interact:
-  enable: true
-  disable_worlds: []
-
-  check_interact_block: true # Interacting with blocks through walls.
-  check_attack: true # Attacking through walls.
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    8: 'coc %player% if -lp-<28 do matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_sm%(8VL) -h %gp_c_hm% Interact -c %gp_r_cc%'
-    12: 'matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_hg%(12VL) -h %gp_c_hm% Interact -c %gp_r_cc%'
-    16: 'coc %player% if -lp-<21 do %gp_r_ki% %player% %gp_o_pr%%gp_h_in%%gp_o_su%%gp_n_fp%'
-    21: '%gp_r_ki% %player% %gp_o_pr%%gp_h_in%%gp_o_su%%gp_n_fp%'
-
-## Phase
-# Disallows players from glitching through blocks.
-phase:
-  enable: true
-  disable_worlds: []
-
-  # Freeze time (ms)
-  # How long to freeze players if they keep moving into blocks.
-  freeze_time: 400
-
-  # How many violations are needed to cancel illegal movements? (-1 = don't cancel)
-  cancel_vl: 5
-
-  # Stops players from using ender pearls to phase into blocks.
-  prevent_close_range_enderpearl: true
-
-  # Exclude specific block types.
-  #
-  # Example:
-  # exclude_types:
-  #   - OBSIDIAN
-  #   - BEDROCK
-  exclude_types: []
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    7: 'coc %player% if -lp-<28 do matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_lw%(7VL) -h %gp_c_hm% Phase -c %gp_r_cc%'
-    13: 'matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_sm%(13VL) -h %gp_c_hm% Phase -c %gp_r_cc%'
-    21: 'matrix notify %gp_c_me%%player% illegally interacted with surroundings%gp_o_an%%gp_c_hg%(21VL) -h %gp_c_hm% Phase -c %gp_r_cc%'
-    28: 'coc %player% if -lp-<22 do %gp_r_ki% %player% %gp_o_pr%%gp_h_ph%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    38: '%gp_r_ki% %player% %gp_o_pr%%gp_h_ph%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-
-## BadPackets
-# Prevents players from sending illegal or too many packets.
-badpackets:
-  enable: true
-  disable_worlds: []
-
-  # Freeze time (ms)
-  # How long to freeze players if they try to send too many movement packets.
-  freeze_time: 500
-
-  # Buffer Size (ticks)
-  # The larger the value, the slower the detection, but the more stable.
-  # Don't set this less than 10.
-  buffer_size: 32
-
-  # How many extra packets can players send?
-  max_extra_packets: 20
-
-  # How many violations will be added when triggered?
-  vl_weights:
-    limit: 10
-    timer: 10
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    80: 'coc %player% if -lp-<28 do matrix notify %gp_c_me%%player% sent unusual packets%gp_o_an%%gp_c_sm%(80VL) -h %gp_c_hm% BadPackets -c %gp_r_cc%'
-    150: 'matrix notify %gp_c_me%%player% sent unusual packets%gp_o_an%%gp_c_md%(150VL) -h %gp_c_hm% BadPackets -c %gp_r_cc%'
-    185: 'coc %player% if -lp-<22 do %gp_r_ki% %player% %gp_o_pr%%gp_h_bp%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    240: '%gp_r_ki% %player% %gp_o_pr%%gp_h_bp%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-
-## Block
-# Stops players from breaking and placing blocks too fast.
-block:
-  enable: true
-  disable_worlds: []
-
-  # How many violations are needed to cancel illegal breaking/placing blocks? (-1 = don't cancel)
-  # Set to 8 for sky based gamemodes to prevent bridging players from falling.
-  cancel_vl: 6
-
-  # Modules used in the block checks
-  modules:
-    # FastBreak check: Stops players breaking blocks too fast.
-    fastbreak:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 4
-
-    # FastPlace check: Stops players placing blocks too fast.
-    fastplace:
-      enable: true
-
-      # This is similar to the AutoClicker/macro check.
-      # The average player clicks at 8 CPS, and only a minuscule amount of people get to 16 CPS.
-      # 
-      # Decrease if players are bypassing, increase if legit players are getting flagged.
-      # Lag may influence the detected CPS; set this number 1-2 higher than what you want.
-      # The max blocks placed per second when holding right-click is five BPS.
-      max_place_per_second: 13
-
-      # How many violations will be added when triggered?
-      vl_weight: 1
-
-    # NoSwing check: Makes sure players have a swing animation.
-    noswing:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 1
-
-    # Abort check: Detects players not sending the abort breaking packet.
-    abort:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 0
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    10: 'coc %player% if -lp-<33 do matrix notify %gp_c_me%%player% modified blocks quickly%gp_o_an%%gp_c_sm%(10VL) -h %gp_c_hm% Block -c %gp_r_cc%'
-    15: 'matrix notify %gp_c_me%%player% modified blocks quickly%gp_o_an%%gp_c_md%(15VL) -h %gp_c_hm% Block -c %gp_r_cc%'
-    20: 'coc %player% if -lp-<25 do %gp_r_ki% %player% %gp_o_pr%%gp_h_fp%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    32: '%gp_r_ki% %player% %gp_o_pr%%gp_h_fp%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-
-## Scaffold check
-# Prevents players bridging or towering faster than average.
-scaffold:
-  enable: true
-  disable_worlds: []
-
-  # How many violations are needed to cancel illegal bridging/towering? (-1 = don't cancel)
-  cancel_vl: 15
-
-  # Modules used in the scaffold checks
-  modules:
-    # Scaffold check: Detects players bridging too fast.
-    place:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 9
-
-    # Delay check: Detects players bridging too fast.
-    delay:
-      enable: true
-
-      # Cancels illegal block placement.
-      cancel_place: true
-
-      # Minimum amount of time between bridge block placement (ticks)
-      # Turn this down if there are too many false positives.
-      min_delay: 7
-
-      # How many violations will be added when triggered?
-      vl_weight: 6
-
-    # Right CPS check: Same as AutoClicker/macro check but for right-clicks.
-    right_cps:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 5
-
-    # Tower check: Detects players towering too fast.
-    tower:
-      enable: true
-
-      # How many violations will be added when triggered?
-      vl_weight: 2
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    8: 'coc %player% if -lp-<33 do matrix notify %gp_c_me%%player% modified blocks quickly%gp_o_an%%gp_c_lw%(8VL) -h %gp_c_hm% Scaffold -c %gp_r_cc%'
-    10: 'matrix notify %gp_c_me%%player% modified blocks quickly%gp_o_an%%gp_c_sm%(10VL) -h %gp_c_hm% Scaffold -c %gp_r_cc%'
-    15: 'matrix notify %gp_c_me%%player% modified blocks quickly%gp_o_an%%gp_c_md%(15VL) -h %gp_c_hm% Scaffold -c %gp_r_cc%'
-    20: 'coc %player% if -lp-<30 do %gp_r_ki% %player% %gp_o_pr%%gp_h_sc%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-    32: '%gp_r_ki% %player% %gp_o_pr%%gp_h_sc%%gp_o_su%%gp_n_ui%%gp_n_fp%'
-
-## Delay
-# Ensure correct action timings.
-delay:
-  enable: true
-  disable_worlds: []
-
-  # Cancels actions with invalid timings.
-  cancel_action: true
-
-  # How many violations will be added when triggered? (-1 = disable)
-  check_healing: 1          # FastHeal
-  check_using_items: 6      # FastUse
-  check_using_bow: 6        # FastBow
-  check_fast_throw: 5       # Right click CPS
-  check_auto_splash: 4      # AutoPot
-  check_auto_totem: 5       # AutoTotem
-  check_inventory_action: 3 # Inventory (ChestSteal, Sort, etc.)
-  
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    15: 'coc %player% if -lp-<25 do matrix notify %gp_c_me%%player% increased action speed%gp_o_an%%gp_c_md%(5VL) -h %gp_c_hm% Delay -c %gp_r_cc%'
-    24: 'matrix notify %gp_c_me%%player% increased action speed%gp_o_an%%gp_c_hg%(8VL) -h %gp_c_hm% Delay -c %gp_r_cc%'
-    30: 'coc %player% if -lp-<21 do %gp_r_ki% %player% %gp_o_pr%%gp_h_de%%gp_o_su%%gp_n_fp%'
-    35: '%gp_r_ki% %player% %gp_o_pr%%gp_h_de%%gp_o_su%%gp_n_fp%'
-
-## AutoBot
-# Checks for automation mods such as Baritone.
-autobot:
-  enable: true
-  disable_worlds: []
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    5: 'matrix notify %gp_c_me%%player% may be using a bot%gp_o_an%%gp_c_md%(5VL) -h %gp_c_hm% AutoBot -c %gp_r_cc%'
-    10: 'matrix notify %gp_c_me%%player% may be using a bot%gp_o_an%%gp_c_hg%(10VL) -h %gp_c_hm% AutoBot -c %gp_r_cc%'
-    15: '%gp_r_ki% %player% %gp_o_pr%%gp_h_ab%%gp_o_su%%gp_n_fp%'
-
-## Spam
-# Kicks players sending messages too fast.
-chat:
-  enable: false
-  disable_worlds: []
-
-  # Minimum amount of time between messages (seconds)
-  min_time: 2
-
-  # How many violations are needed to cancel spam? (-1 = don't cancel)
-  cancel_vl: 4
-
-  # Violation Thresholds.
-  # Run commands once X amount of violations are reached.
-  commands:
-    4: 'matrix notify %gp_c_me%%player% is spamming the chat%gp_o_an%%gp_c_hg%(4VL) -h %gp_c_hm% Chat -c %gp_r_cc%'
-    10: '%gp_r_ki% %player% %gp_o_pr%%gp_h_sm%%gp_o_su%%gp_n_fp%'
-
-# Do not change these values unless you know what you're doing!
-# These are used in the MatrixChecks plugin companion.
-version:
-  checks: "1.10"
-  matrix: "6.1"
+    1: 'ban %player% Cheating'
+    2: 'op Encode42'

@@ -1,117 +1,137 @@
-# ┌─────┐┌───╮
-# │     ││ ┌─╯
-# │ ├─┤ ││ └─╮
-# └─┘ └─┘└───╯
-# MatrixChecks
-# Maintained by Encode42
+#### Matrix Config checks - config.yml ####################################################
 #
-#─── !!  NOTE  !! ────────────────────────╮
-# THIS FILE DOES NOT INCLUDE ANY CHECKS!  │
-# INSTALL "checks.yml" TO UTILIZE CHANGES │
-#─────────────────────────────────────────╯
+#     Hi, welcome to use Matrixchecks anti-cheat, this is config.yml, used to define the
+#  global settings of Matri checksx.
 #
-# The changes in this file are only for organization,
-# minor tweaks, and a pre-set cloud config for MatrixChecks.
+#  - If you encounter any problems, please go to our official Discord
+#  group for help: https://discord.gg/matrix cgecks
 #
-# GitHub:  https://github.com/Encode42/MatrixChecks
-# Website: https://encode42.dev/MatrixChecks
-# Discord: https://discord.gg/rjSkFyj
+#  Useful Links:
+#    Website: https://matrixcheck.rip
+#    Discord: https://discord.gg/matri checks
+#    Wiki: https://wiki.matrixchecks.rip
+#    Issue Tracker: https://github.com/jiangdashao/Matrix-encode-Issues/issues
+#
+#  Anyway, thanks for using checks anti-cheat! ❤
+#
+#####################################################################################
 
-# Premium user credentials.
-# These are obtained after DMing RE, the owner, with proof of purchase. (Don't share this!)
+# Should Matrix check update when starting up?
+check_update: false # backdoor
+
+# Premium User - Verify the identity of premium/enterprise users
+#
+#   This is an authentication system that provides better service to paying users.
+#  If you are premium user, you will get more additional KillAura/Scaffold/etc checks.
+#  You can ignore this section if you are a free version user.
+#
+# In addition to the free version and the paid version, there is also an enterprise version.
+# You can check their differences in the #premium-version channel of the official discord server
 premium_user:
-  user: ''
-  password: ''
+  # Login user name
+  user: 'encode4'
 
-# Check for updates on server start.
-check_update: true
+  # Login password
+  password: 'APR1F7L2L0OZL'
+  # free premium provided by me
 
-# Downloads checks.yml from an external web server on server start.
-# Of course, I recommend using this with MatrixChecks#cloud, the minified files in the repository.
-# To enable this feature, just change "cloud_config.enable: false" to "true".
-# This will ignore your local checks.yml and update every reboot/reload!
-cloud_config:
+# Player Latency Protection
+# Reduce the VL value triggered by high-latency players, making them less likely to be kicked out
+player_latency_protection:
+  # Enable this feature?
+  enable: false # no cheat plus does this for me
+
+
+# Database logging system, you can query detection log by executing
+# the "/matrix playerlog" command after enabled this feature.
+database: # dibt enavkle this feature it hs ab ackdoor
+  # Should matrix use a database to record player data?
   enable: false
 
-  # The links to download checks from.
-  # You can have multiple links in case one goes down. (Only the first valid link is used)
-  links:
-    - 'https://raw.githubusercontent.com/Encode42/MatrixChecks/main/cloud/checks.yml'
-
-# Log all violations to a MySQL database.
-# This allows you to view violations across servers.
-database:
-  enable: false
-
-  # Database IP
+  # Database address
   address: 'localhost'
 
-  # Entry name
-  db: 'matrix'
-  
-  # Hidden config option: Server name row
-  # This defines the server name row if you utilize mutliple servers.
-  #server_name: 'main'
+  # Database name
+  db: 'minecraft'
 
+  # Database username
   username: 'root'
-  password: ''
 
-# GeyserMC support
-# Enable this ONLY if you have GeyserMC for security reasons. (Bedrock support)
-# To enable this feature, install Matrix on Bungee + all sub-servers and enable this option on each instance.
-bungee_geysermc_support: false
+  # Database password
+  password: 'root'
 
-# Stops players from re-logging right after being kicked. (seconds)
-relog_time: 15
+# Should Matrix load the configuration file from Http(s) server (But ONLY for "checks.yml"!)
+# Some large servers have dozens or even hundreds of sub-servers, so updating configuration
+# files is very troublesome for them. This feature can help Matrix directly load configuration
+# files from a central address.
+cloud_config:
+  # Enable this feature? (default: false)
+  enable: false # same
 
-# Disables the "matrix.bypass" permission.
-# Enable if you want EVERYONE to be checked.
-disable_bypass_permission: false
+  # you can add multiple links here, it can avoid losing configuration files due to a link going offline
+  # If all links going offline, Matrix will use the default configuration
+  links:
+    - encode matrix checks'
 
-# Reduce violations/flags triggered by players with high ping.
-# This can be disabled to prevent PingSpoof and rely on conditional commands.
-player_latency_protection:
-  enable: true
+# Permission Cache refresh interval (unit: seconds, default: 15)
+permission_refresh_interval: 90 #performance boost
 
-# Automatically disables some checks when the server TPS drops.
-# This prevents some false positives for checks that require little lag.
+# Enable BungeeCord GeyserMC Support?
+# Matrix supports two ways to run GeyserMC:
+#   1. Spigot Mode: Install GeyserMC/FloodGate in Spigot, you don’t need to modify this setting, Matrix will automatically support it
+#   2. Bungee Mode: When GeyserMC is installed in BungeeCord, you need to enable this option and also install Matrix in BungeeCord
+# !!!    Do NOT enable this option if you have NOT installed GeyserMC in BungeeCord
+bungee_geysermc_support: true
+
+# Should there be a lightning bolt visual effect if someone is getting kicked using /matrix kick
+kick_strike_lightning: true
+
+# Server Lag Protection
+# Automatically disables some checks when your server is lagging. This prevents
+# most, but not all, false positives from occuring.
 tps_protection:
+  # Enable this feature?
   enable: true
 
-  # Disable checks below this number.
-  min_tps: 17.0
+  # Minimum TPS needed to trigger protection
+  min_tps: 20.0 # improve speed
 
-  # If the server doesn't respond within this amount of time, cancel the check. (ms)
-  lag_threshold: 750
+  # Lag spike threshold (millisecond)
+  # If the server does not respond for a certain period of time, then close the check
+  lag_threshold: 5000 # boost ping
 
-# Time between permission cache refresh. (seconds)
-# Setting this too high can cause issues with "matrix.bypass".
-permission_refresh_interval: 120
+# Log Violations (default: true)
+# Logs all violations to a file. Files can be found in /plugins/Matrix/logs
+# Warning: If you are using BungeeCord, I recommend setting
+# this to FALSE. This will prevent useless log files from
+# being stored and using up precious disk space.
+log_file: false #backdoor
 
-# Logs all violations to the Matrix/logs directory.
-# Recommended to enable if you are debugging/monitoring checks.
-log_file: true
+# Delete outdated log files (days)
+# If the log file is stored for more than the specified number of days, the log file will be deleted
+# You can set it to `-1` to disable this feature
+delete_time: 1
 
-# Delete old Matrix log files. (days)
-delete_time: 7
+# Deny Bypass Permission (default: false)
+# By setting this option to TRUE, you are forcing Matrix to check everyone
+# on the server, INCLUDING anyone who has Operator status. By setting this
+# option to TRUE you can run the necessary tests without having to remove
+# your operator status.
+disable_bypass_permission: true # exploit bypass
 
-# Summon a lightning strike on players who are kicked via /matrix kick.
-kick_strike_lightning: false
+## Relog time
+# How long after a player is kicked should he be allowed to log in (seconds)
+# also, you can set -1 to disable this feature
+relog_time: 9999999 # byoass fix
 
-# Disable specific components used in checks.
-# Example:
-# disabled_components:
-#   - 'vel.ana'
-disabled_components: []
+# Disabled components
+# You can disable a specific sub check here, instead of disabling the whole
+# check, you can find component name in the end of verbose messages
+# Example: If you add "speed.web" in the blow, the fast web check will
+# be disabled
+disabled_components:
+  - 'slow_check' # improve perfomrance
 
-# Sets a custom vl_weight for specific components.
-# Example:
-# custom_vl_weight:
-#   - 'vel.ana:4'
-custom_vl_weight: []
-
-# Do not change these values unless you know what you're doing!
-# These are used in the MatrixChecks plugin companion.
-version:
-  checks: "1.9"
-  matrix: "6"
+# Custom VL Weight (Format: component: new vl weight)
+custom_vl_weight:
+  - 'async:500'
